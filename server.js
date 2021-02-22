@@ -36,15 +36,12 @@ app.get("/notes", function(req, res) {
   
   });
 
-  app.delete("/api/notes/:id", (req, res) => {
+  app.delete("/api/notes/:id", function (req, res) {
       const deleteId = req.params.id;
-      for (const i = 0; i < notes.length; i++){
-          if(notes[i].id == deleteId){
-              notes.splice(i, 1);
-          }
-      }
+      const data = JSON.parse(fs.readFileSync("./db/db.json", "utf8"));
+      const filteredData = data.filter((note) => note.id != deleteId);
       fs.writeFileSync('./db/db.json', JSON.stringify(notes));
-      return res.json(notes);
+      res.json(true);
   });
 
   app.listen(PORT, () => {
